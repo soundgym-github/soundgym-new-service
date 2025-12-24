@@ -37,7 +37,7 @@ app.post("/v1/secure-task", requireApiKey, (req, res) => {
   res.json({ ok: true, received: req.body });
 });
 
-// 기존 secret 엔드포인트 (원하면 유지)
+// 기존 secret 엔드포인트 (보호로 전환)
 app.get("/secret", requireApiKey, (req, res) => {
   res.json({ secret: "this-is-protected" });
 });
