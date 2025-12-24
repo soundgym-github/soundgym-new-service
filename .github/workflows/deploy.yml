@@ -2,38 +2,26 @@ name: Deploy to Cloud Run
 
 on:
   push:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
-  id-token: write
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud (WIF)
-        id: auth
+      - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          token_format: 'access_token'
           workload_identity_provider: 'projects/931514733724/locations/global/workloadIdentityPools/github-pool/providers/github'
           service_account: 'github-deployer@sg-2026-new-service.iam.gserviceaccount.com'
-
-      - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v2
-        with:
           project_id: 'sg-2026-new-service'
 
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy hello-api \
-            --source . \
-            --region asia-northeast3 \
-            --project sg-2026-new-service \
-            --allow-unauthenticated \
-            --service-account hello-api-sa@sg-2026-new-service.iam.gserviceaccount.com
+      - name: Set up gcloud
